@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
 from .models import Finch, Toy
-from .forms import FeedingForm
+from .forms import FeedingForm, FinchForm
 
 
 # Create your views here.
@@ -32,29 +32,32 @@ def signup(request):
 
 
 def home(request):
-    return HttpResponse('<h1>Hello /ᐠ｡‸｡ᐟ\ﾉ</h1>')
+    return render(request, 'home.html')
 
 
 def about(request):
     return render(request, 'about.html')
 
 
-@login_required
+@ login_required
 def finches_index(request):
-    # if request.method == 'POST':
-    #     finch_form = Finch_Form(request.POST)
-    #     if finch_form.is_valid():
-    #         finch_form.save(commit=False)
-    #         finch_form.user = request.user
-    #         finch_form.save()
-    #         return redirect('finches_index')
     finches = Finch.objects.filter(user=request.user)
-    # finch_form = Finch_Form(request)
-    # context = {'finches': finches, 'finch_form': finch_form}
-    context = {'finches': finches}
-    return render(request, 'finches/index.html', context)
+    return render(request, 'finches/index.html', {'finches': finches})
 
 
+@ login_required
+def finches_new(request):
+    finch_form = FinchForm(request.POST or None)
+    if request.POST and finch_form.is_valid():
+        new_finch = finch_form.save(commit=False)
+        new_finch.user = request.user
+        new_finch.save()
+        return redirect('finches')
+    else:
+        return render(request, 'finches/new.html', {'finch_form': finch_form})
+
+
+@ login_required
 def finches_detail(request, finch_id):
     finch = Finch.objects.get(id=finch_id)
     toys_finch_doesnt_have = Toy.objects.exclude(id__in=finch.toys.all().values_list('id'))
@@ -66,7 +69,7 @@ def finches_detail(request, finch_id):
     })
 
 
-@login_required
+@ login_required
 def add_feeding(request, finch_id):
     form = FeedingForm(request.POST)
     if form.is_valid():
@@ -76,7 +79,7 @@ def add_feeding(request, finch_id):
     return redirect('detail', finch_id=finch_id)
 
 
-@login_required
+@ login_required
 def assoc_toy(request, finch_id, toy_id):
     # Note that you can pass a toy's id instead of the whole object
     Finch.objects.get(id=finch_id).toys.add(toy_id)

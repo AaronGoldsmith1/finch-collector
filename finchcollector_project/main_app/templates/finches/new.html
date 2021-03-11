@@ -1,0 +1,11 @@
+  
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Add A Finch</h1>
+
+  <form method="POST" action="{% url 'new' %}">
+    {% csrf_token %}
+    {{ finch_form.as_p }}
+    <input type="submit" class="btn" value="Add Finch">
+  </form>
+{% endblock content %}
