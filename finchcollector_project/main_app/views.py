@@ -22,7 +22,7 @@ def signup(request):
             user = form.save()
             # This is how we log a user in via code
             login(request, user)
-            return redirect('cats_index')
+            return redirect('finches_index')
         else:
             error_message = 'Invalid sign up - try again'
     # A GET or a bad POST request, so render signup.html with an empty form
@@ -41,17 +41,17 @@ def about(request):
 
 @login_required
 def finches_index(request):
-    if request.method == 'POST':
-        finch_form = Finch_Form(request.POST)
-        if finch_form.is_valid():
-            # Add the user from the request object before saving
-            new_finch = finch_form.save(commit=False)
-            new_finch.user = request.user
-            new_finch.save()
-            return redirect('finches_index')
+    # if request.method == 'POST':
+    #     finch_form = Finch_Form(request.POST)
+    #     if finch_form.is_valid():
+    #         finch_form.save(commit=False)
+    #         finch_form.user = request.user
+    #         finch_form.save()
+    #         return redirect('finches_index')
     finches = Finch.objects.filter(user=request.user)
-    finch_form = Finch_Form()
-    context = {'finches': finches, 'finch_form': finch_form}
+    # finch_form = Finch_Form(request)
+    # context = {'finches': finches, 'finch_form': finch_form}
+    context = {'finches': finches}
     return render(request, 'finches/index.html', context)
 
 

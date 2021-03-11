@@ -1,5 +1,11 @@
 from django import forms
-from .models import Feeding
+from .models import Finch, Feeding
+
+
+class FinchForm(forms.ModelForm):
+    class Meta:
+        model = Finch
+        fields = ['name', 'species', 'description', 'age']
 
 
 class FeedingForm(forms.ModelForm):
