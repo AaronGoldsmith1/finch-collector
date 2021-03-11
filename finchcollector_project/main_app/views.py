@@ -70,6 +70,17 @@ def finches_detail(request, finch_id):
 
 
 @ login_required
+def finches_edit(request, finch_id):
+    finch = Finch.objects.get(id=finch_id)
+    finch_form = FinchForm(request.POST or None, instance=finch)
+    if request.POST and finch_form.is_valid():
+        finch_form.save()
+        return redirect('detail', finch_id=finch_id)
+    else:
+        return render(request, 'finches/edit.html', {'finch': finch, 'finch_form': finch_form})
+
+
+@ login_required
 def finches_delete(request, finch_id):
     Finch.objects.get(id=finch_id).delete()
     return redirect('finches')

@@ -13,7 +13,7 @@
         <p>Age: {{ finch.age }}</p>
       </div>
       <div class="card-action">
-        {% comment %} <a href="{% url 'edit' cat.id %}">Edit</a> {% endcomment %}
+        <a href="{% url 'edit' finch.id %}">Edit</a>
 
         <form method="POST" action="{% url 'delete' finch.id %}">
           {% csrf_token %}
