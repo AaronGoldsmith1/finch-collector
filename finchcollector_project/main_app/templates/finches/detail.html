@@ -12,6 +12,14 @@
         <p>Description: {{ finch.description }}</p>
         <p>Age: {{ finch.age }}</p>
       </div>
+      <div class="card-action">
+        {% comment %} <a href="{% url 'edit' cat.id %}">Edit</a> {% endcomment %}
+
+        <form method="POST" action="{% url 'delete' finch.id %}">
+          {% csrf_token %}
+          <input type="submit" class="btn" value="Delete">
+        </form>
+      </div>
     </div>
   </div>
   <div class="col s6">

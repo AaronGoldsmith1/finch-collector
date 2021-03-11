@@ -70,6 +70,12 @@ def finches_detail(request, finch_id):
 
 
 @ login_required
+def finches_delete(request, finch_id):
+    Finch.objects.get(id=finch_id).delete()
+    return redirect('finches')
+
+
+@ login_required
 def add_feeding(request, finch_id):
     form = FeedingForm(request.POST)
     if form.is_valid():
@@ -81,6 +87,5 @@ def add_feeding(request, finch_id):
 
 @ login_required
 def assoc_toy(request, finch_id, toy_id):
-    # Note that you can pass a toy's id instead of the whole object
     Finch.objects.get(id=finch_id).toys.add(toy_id)
     return redirect('detail', finch_id=finch_id)
